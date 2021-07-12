@@ -1,0 +1,29 @@
+api:
+  insecure: true
+  dashboard: true
+providers:
+  docker:
+    exposedByDefault: false
+    network: myglobalnetwork
+  file:
+    directory: /providers/
+    watch: true
+  http:
+    endpoint: 'http://http-provider/dynamic_conf/http_dynamic_conf.yml'
+entryPoints:
+  web:
+    address: ':80'
+  websecure:
+    address: ':443'
+log:
+  filePath: /var/log/traefik/traefik.log
+  level: DEBUG
+pilot:
+  token: TRAEFIK_PILOT_TOKEN
+experimental:
+  plugins:
+    traefik-opa-plugin:
+      moduleName: "github.com/team-carepay/traefik-opa-plugin"
+      version: "v0.0.3"
+accessLog:
+  filePath: /var/log/traefik/access.log

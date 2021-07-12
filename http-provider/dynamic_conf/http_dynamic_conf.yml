@@ -1,0 +1,26 @@
+---
+http:
+  middlewares:
+    test-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/httpd"
+    test-opa:
+      plugin:
+        traefik-opa-plugin:
+          AllowField: allow
+          URL: http://opa:8181/v1/data/example
+  routers:
+    http-httpd-opa:
+      entryPoints:
+        - web
+      service: httpd@http
+      rule: PathPrefix(`/httpd`)
+      middlewares:
+        - test-stripprefix@http
+        - test-opa
+  services:
+    httpd:
+      loadBalancer:
+        servers:
+          - url: http://http-provider
